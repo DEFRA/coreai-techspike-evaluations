@@ -1,3 +1,9 @@
 python-dotenv
 langfuse
 ollama
+langchain
+langchain-community
+bs4
+gpt4all
+chromadb
+pypdf
