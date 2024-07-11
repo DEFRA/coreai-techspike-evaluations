@@ -3,7 +3,9 @@ langfuse
 ollama
 langchain
 langchain-community
+langchain_postgres
 bs4
-gpt4all
-chromadb
 pypdf
+psycopg2-binary 
+psycopg-binary 
+pgvector

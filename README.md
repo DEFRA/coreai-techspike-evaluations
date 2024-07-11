@@ -38,3 +38,10 @@ If this is the first time you have setup the application:
 - Click 'Create new API keys'
 - Copy the secret key and paste it into your .env file 'LANGFUSE_SECRET_KEY'
 - Copy the public key and paste it into your .env file 'LANGFUSE_PUBLIC_KEY'
+
+
+
+## PGVector
+
+Reference: 
+https://api.python.langchain.com/en/latest/vectorstores/langchain_postgres.vectorstores.PGVector.html#langchain_postgres.vectorstores.PGVector
