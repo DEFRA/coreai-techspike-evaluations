@@ -5,11 +5,9 @@ from langchain_community.llms import Ollama
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import OllamaEmbeddings
-from langchain.chains import create_retrieval_chain
 
 # import psycopg2
 from langchain_core.documents import Document
-# from langchain_postgres import PGVector
 from langchain_postgres.vectorstores import PGVector
 
 # Load environment variables from .env file
