@@ -5,9 +5,12 @@ from langchain_community.llms import Ollama
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import OllamaEmbeddings
-from langchain_core.documents import Document
 from langchain_postgres.vectorstores import PGVector
 
+from langchain_core.prompts.prompt import PromptTemplate
+
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.schema.output_parser import StrOutputParser
 
 # Load environment variables from .env file
 load_dotenv()
@@ -16,13 +19,14 @@ load_dotenv()
 model = os.getenv("MODEL_NAME")
 base_url = os.getenv("LANGFUSE_HOST")
 
+
 # Initialize Ollama with the model name
 llm = Ollama(model=model)
 
 
-# DOCUMENT LOADER --------------------------------------------------------------------------
+# # DOCUMENT LOADER --------------------------------------------------------------------------------------
 
-# # Create document loader for a PDF in the ./docs directory
+# # # Create document loader for a PDF in the ./docs directory
 file_path = "./docs/defra.pdf"
 
 # Load and split the document
@@ -31,12 +35,12 @@ pages = loader.load()
 
 
 
-# TEXT SPLITTER ----------------------------------------------------------------------------
+# TEXT SPLITTER -----------------------------------------------------------------------------------------
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
 docs = text_splitter.split_documents(pages)
 
-# docs = docs[0:2] # TEMP for local testing - added to reduce time for saving embeddings to PGVector
+docs = docs[0:2] # TEMP for local testing - added to reduce time for saving embeddings to PGVector
 
 
 
@@ -60,15 +64,41 @@ vectorstore = PGVector.from_documents(
     async_mode=False,
 )
 
+retriever = vectorstore.as_retriever()
 
 
 # FIND SIMILAR VECTORS BASED ON THE QUERY ----------------------------------------------------------------
 
 # Query
-query = "What is the budget?"
+# query = "What is the budget?"
 
-similar = vectorstore.similarity_search_with_score(query, k=2) # k=2 to return 2 similar documents
+# similar = vectorstore.similarity_search_with_score(query, k=2) # k=2 to return 2 similar documents
 
-for doc in similar:
-  print(doc)
-  print(f"Page: {doc[0].metadata['page']}, Similarity: {doc[1]}")
+# for doc in similar:
+#   print(doc)
+#   print(f"Page: {doc[0].metadata['page']}, Similarity: {doc[1]}")
+
+
+
+# PROMPT TEMPLATE ----------------------------------------------------------------------------------------
+
+template = """Answer the question based on the follwing contex: {context}
+If you are unable to find the answer within the context, please respond with 'I don't know'.
+
+Question: {question}
+"""
+
+prompt = PromptTemplate(
+  template = template,
+  input_variables = ['context', 'question']
+  )
+
+
+# CHAIN -------------------------------------------------------------------------------------------------
+
+# rag_chain = (
+#   {"context": retriever, "question": RunnablePassthrough()}
+#   | prompt
+#   | model
+#   | StrOutputParser()
+# )
