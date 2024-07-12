@@ -36,8 +36,7 @@ pages = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
 docs = text_splitter.split_documents(pages)
 
-# TEMP for local testing - added to reduce time for saving embeddings to PGVector
-# docs = docs[0:2]
+# docs = docs[0:2] # TEMP for local testing - added to reduce time for saving embeddings to PGVector
 
 
 
@@ -48,14 +47,15 @@ embeddings = OllamaEmbeddings(model='llama3')
 
 doc_vectors = embeddings.embed_documents([t.page_content for t in docs[:5]]) # update :1 to :5 - defines the number of documents to embed
 
-# Vectorstore
+# Populatre the PGVector vectorstore
 connection_string = f"postgresql+psycopg://{os.getenv('POSTGRES_USERNAME')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}"
+collection_name = os.getenv('PGVECTOR_COLLECTION_NAME')
 
 vectorstore = PGVector.from_documents(
     embedding=embeddings,
     documents=docs,
     connection=connection_string,
-    collection_name=os.getenv('PGVECTOR_COLLECTION_NAME'),
+    collection_name=collection_name,
     use_jsonb=True,
     async_mode=False,
 )
