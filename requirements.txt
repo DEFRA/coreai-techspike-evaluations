@@ -6,6 +6,6 @@ langchain-community
 langchain_postgres
 bs4
 pypdf
-psycopg2-binary 
-psycopg-binary 
+psycopg-binary
+psycopg2-binary
 pgvector

@@ -1,4 +1,4 @@
-# POC: Application to test automated evaluations using Langfuse, RAGAs and Langchain evaluations.
+# POC: GenAI Retrieval Augmented Generation (RAG) application with locally running models using Ollama, Langchain, Langfuse and Ragas
 
 ## Setup
 
@@ -24,6 +24,19 @@ Install the required dependencies into the new Python3 virtual environment
 pip install -r requirements.txt
 ```
 
+## Ollama
+
+- Download and install Ollama from https://ollama.com
+- Run
+```
+ollama pull phi3:mini
+```
+```
+ollama pull nomic-embed-text
+```
+```
+ollama run phi3:mini
+```
 
 ## Langfuse
 
