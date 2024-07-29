@@ -62,7 +62,7 @@ https://api.python.langchain.com/en/latest/vectorstores/langchain_postgres.vecto
 
 
 
-## Python3 Environment - For code hinting
+## Python3 Environment
 
 Create a new Python3 virtual environment
 ```
